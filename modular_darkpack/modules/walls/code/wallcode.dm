@@ -88,62 +88,21 @@
 	return
 
 // TODO: [Rebase] - Reimplement climbing
-/turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/living/user, params)
+/*
+/turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/user, params)
 	. = ..()
-	if(!user.combat_mode)
+	if(user.a_intent != INTENT_HARM)
 		//Adds the component only once. We do it here & not in Initialize() because there are tons of windows & we don't want to add to their init times
-		LoadComponent(/datum/component/leanable, dropped)
+		LoadComponent(/datum/component/leanable, dropping)
 	else
 		if(get_dist(user, src) < 2)
 			var/turf/above_turf = locate(user.x, user.y, user.z + 1)
 			if(above_turf && istype(above_turf, /turf/open/openspace))
-				climb_wall(user, above_turf)
+				var/mob/living/carbon/human/carbon_human = user
+				carbon_human.climb_wall(above_turf)
 			else
 				to_chat(user, span_warning("You can't climb there!"))
-	return
-
-/turf/closed/wall/vampwall/proc/climb_wall(mob/living/user, turf/above_turf)
-	if(user.body_position != STANDING_UP)
-		return
-	if(above_turf && istype(above_turf, /turf/open/openspace))
-		var/total_dexterity = user.st_get_stat(STAT_DEXTERITY)
-		var/total_athletics = user.st_get_stat(STAT_ATHLETICS)
-		user.to_chat(src, "<span class='notice'>You start climbing up...</span>")
-
-		var/result = do_after(src, 50 - (total_dexterity + total_athletics * 5), src)
-		if(!result || HAS_TRAIT(src, LEANING_TRAIT))
-			user.to_chat(src, "<span class='warning'>You were interrupted and failed to climb up.</span>")
-			return
-
-		var/initial_x = x
-		var/initial_y = y
-		var/initial_z = z
-
-		// Adjust pixel_x and pixel_y based on the direction
-		// spawn(20)
-		if(x != initial_x || y != initial_y || z != initial_z)
-			user.to_chat(src, "<span class='warning'>You moved and failed to climb up.</span>")
-			// Reset pixel offsets
-			return
-
-		//(< 5, slip and take damage), (5-14, fail to climb), (>= 15, climb up successfully)
-		var/roll = rand(1, 20)
-		// var/physique = physique
-		if((roll + total_dexterity + (total_athletics * 2)) >= 15)
-			user.loc = above_turf
-			var/turf/forward_turf = get_step(loc, dir)
-			if(forward_turf && !forward_turf.density)
-				user.forceMove(forward_turf)
-				user.to_chat(src, "<span class='notice'>You climb up successfully.</span>")
-				// Reset pixel offsets after climbing up
-		else if((roll + total_dexterity + (total_athletics * 2)) < 5)
-			user.ZImpactDamage(loc, 1)
-			user.to_chat(src, "<span class='warning'>You slip while climbing!</span>")
-			// Reset pixel offsets if failed
-		else
-			user.to_chat(src, "<span class='warning'>You fail to climb up.</span>")
-
-	return
+*/
 
 /turf/closed/wall/vampwall/ex_act(severity, target)
 	return
