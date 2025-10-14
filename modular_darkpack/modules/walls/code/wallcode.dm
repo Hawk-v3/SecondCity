@@ -109,21 +109,11 @@
 		var/total_dexterity = user.st_get_stat(STAT_DEXTERITY)
 		var/total_athletics = user.st_get_stat(STAT_ATHLETICS)
 		to_chat(user, span_notice("You start climbing up..."))
+		src.add_fingerprint(user)
 
-		var/result = do_after(src, 50 - (total_dexterity + total_athletics * 5), src)
-		if(!result || HAS_TRAIT(src, LEANING_TRAIT))
+		var/result = do_after(user, 50 - (total_dexterity + total_athletics * 5), src)
+		if(!result || HAS_TRAIT(user, LEANING_TRAIT))
 			to_chat(user, span_notice("You were interrupted and failed to climb up."))
-			return
-
-		var/initial_x = x
-		var/initial_y = y
-		var/initial_z = z
-
-		// Adjust pixel_x and pixel_y based on the direction
-		// spawn(20)
-		if(x != initial_x || y != initial_y || z != initial_z)
-			to_chat(user, span_warning("You moved and failed to climb up."))
-			// Reset pixel offsets
 			return
 
 		//(< 5, slip and take damage), (5-14, fail to climb), (>= 15, climb up successfully)
@@ -135,11 +125,9 @@
 			if(forward_turf && !forward_turf.density)
 				user.forceMove(forward_turf)
 				to_chat(user, span_notice("You climb up successfully."))
-				// Reset pixel offsets after climbing up
 		else if((roll + total_dexterity + (total_athletics * 2)) < 5)
 			user.ZImpactDamage(loc, 1)
 			to_chat(user, span_warning("You slip while climbing!"))
-			// Reset pixel offsets if failed
 		else
 			to_chat(user, span_warning("You fail to climb up."))
 
