@@ -120,8 +120,8 @@
 		var/roll = rand(1, 20)
 		// var/physique = physique
 		if((roll + total_dexterity + (total_athletics * 2)) >= 15)
-			user.loc = above_turf
-			var/turf/forward_turf = get_step(loc, dir)
+			user.zMove(UP, above_turf)
+			var/turf/forward_turf = get_step(user.loc, user.dir)
 			if(forward_turf && !forward_turf.density)
 				user.forceMove(forward_turf)
 				to_chat(user, span_notice("You climb up successfully."))
