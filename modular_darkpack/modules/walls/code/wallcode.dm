@@ -87,7 +87,6 @@
 /turf/closed/wall/vampwall/attack_hand(mob/user)
 	return
 
-// TODO: [Rebase] - Reimplement climbing
 /turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/living/user, params)
 	. = ..()
 	if(!user.combat_mode)
