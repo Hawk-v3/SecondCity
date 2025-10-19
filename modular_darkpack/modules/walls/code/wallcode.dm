@@ -108,23 +108,22 @@
 		var/total_dexterity = user.st_get_stat(STAT_DEXTERITY)
 		var/total_athletics = user.st_get_stat(STAT_ATHLETICS)
 		to_chat(user, span_notice("You start climbing up..."))
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 
 		var/result = do_after(user, 50 - (total_dexterity + total_athletics * 5), src)
 		if(!result || HAS_TRAIT(user, LEANING_TRAIT))
 			to_chat(user, span_notice("You were interrupted and failed to climb up."))
 			return
 
-		//(< 5, slip and take damage), (5-14, fail to climb), (>= 15, climb up successfully)
-		var/roll = rand(1, 20)
-		// var/physique = physique
-		if((roll + total_dexterity + (total_athletics * 2)) >= 15)
+		//(Botch, slip and take damage), (Fail, fail to climb), (Success, climb up successfully)
+		var/roll = SSroll.storyteller_roll((total_dexterity+(total_athletics*2)),6,user)
+		if(roll >= ROLL_SUCCESS)
 			user.zMove(UP, above_turf)
 			var/turf/forward_turf = get_step(user.loc, user.dir)
 			if(forward_turf && !forward_turf.density)
 				user.forceMove(forward_turf)
 				to_chat(user, span_notice("You climb up successfully."))
-		else if((roll + total_dexterity + (total_athletics * 2)) < 5)
+		else if(roll <= ROLL_BOTCH)
 			user.ZImpactDamage(loc, 1)
 			to_chat(user, span_warning("You slip while climbing!"))
 		else
