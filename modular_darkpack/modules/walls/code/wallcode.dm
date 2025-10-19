@@ -110,7 +110,7 @@
 		to_chat(user, span_notice("You start climbing up..."))
 		add_fingerprint(user)
 
-		var/result = do_after(user, 50 - (total_dexterity + total_athletics * 5), src)
+		var/result = do_after(user, (11 - (total_dexterity + total_athletics)) SECONDS), src)
 		if(!result || HAS_TRAIT(user, LEANING_TRAIT))
 			to_chat(user, span_notice("You were interrupted and failed to climb up."))
 			return
