@@ -116,18 +116,21 @@
 			return
 
 		//(Botch, slip and take damage), (Fail, fail to climb), (Success, climb up successfully)
-		var/roll = SSroll.storyteller_roll((total_dexterity+(total_athletics*2)),6,user)
-		if(roll >= ROLL_SUCCESS)
-			user.zMove(UP, above_turf)
-			var/turf/forward_turf = get_step(user.loc, user.dir)
-			if(forward_turf && !forward_turf.density)
-				user.forceMove(forward_turf)
-				to_chat(user, span_notice("You climb up successfully."))
-		else if(roll <= ROLL_BOTCH)
-			user.ZImpactDamage(loc, 1)
-			to_chat(user, span_warning("You slip while climbing!"))
-		else
-			to_chat(user, span_warning("You fail to climb up."))
+		var/roll = SSroll.storyteller_roll(total_dexterity+total_athletics, 6, user)
+		switch(roll)
+			if(ROLL_BOTCH)
+				user.ZImpactDamage(loc, 1)
+				to_chat(user, span_warning("You slip while climbing!"))
+				return
+			if(ROLL_FAILURE)
+				to_chat(user, span_warning("You fail to climb up."))
+				return
+			else
+				user.zMove(UP, above_turf)
+				var/turf/forward_turf = get_step(user.loc, user.dir)
+				if(forward_turf && !forward_turf.density)
+					user.forceMove(forward_turf)
+					to_chat(user, span_notice("You climb up successfully."))
 
 	return
 
