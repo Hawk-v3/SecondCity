@@ -90,7 +90,7 @@
 /turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/living/user, params)
 	. = ..()
 	if(!user.combat_mode)
-		//Adds the component only once. We do it here & not in Initialize() because there are tons of windows & we don't want to add to their init times
+		//Adds the component only once. We do it here & not in Initialize() because there are tons of walls & we don't want to add to their init times
 		LoadComponent(/datum/component/leanable, dropped)
 	else
 		if(get_dist(user, src) < 2)
