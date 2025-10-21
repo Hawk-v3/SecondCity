@@ -94,7 +94,7 @@
 		LoadComponent(/datum/component/leanable, dropped)
 	else
 		if(get_dist(user, src) < 2)
-			var/turf/above_turf = locate(user.x, user.y, user.z + 1)
+			var/turf/above_turf = GET_TURF_ABOVE(get_turf(user))
 			if(above_turf && istype(above_turf, /turf/open/openspace))
 				climb_wall(user, above_turf)
 			else
