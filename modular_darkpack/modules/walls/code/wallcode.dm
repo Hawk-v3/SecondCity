@@ -87,19 +87,22 @@
 /turf/closed/wall/vampwall/attack_hand(mob/user)
 	return
 
-/turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/living/user, params)
+/turf/closed/wall/vampwall/mouse_drop_receive(atom/dropped, mob/user, params)
 	. = ..()
-	if(!user.combat_mode)
+	if(!isliving(user))
+		return
+	var/mob/living/living_user = user
+	if(!living_user.combat_mode)
 		//Adds the component only once. We do it here & not in Initialize() because there are tons of walls & we don't want to add to their init times
 		LoadComponent(/datum/component/leanable, dropped)
 	else
 		if(get_dist(user, src) < 2)
-			var/turf/above_turf = GET_TURF_ABOVE(get_turf(user))
-			if(above_turf && istype(above_turf, /turf/open/openspace))
+			var/turf/user_turf = get_turf(user)
+			var/turf/above_turf = GET_TURF_ABOVE(user_turf)
+			if(living_user.can_z_move(UP, user_turf, above_turf, ZMOVE_STAIRS_FLAGS, user))
 				climb_wall(user, above_turf)
 			else
 				to_chat(user, span_warning("You can't climb there!"))
-	return
 
 /turf/closed/wall/vampwall/proc/climb_wall(mob/living/user, turf/above_turf)
 	if(user.body_position != STANDING_UP)
@@ -131,7 +134,6 @@
 				if(forward_turf && !forward_turf.density)
 					user.forceMove(forward_turf)
 					to_chat(user, span_notice("You climb up successfully."))
-	return
 
 /turf/closed/wall/vampwall/ex_act(severity, target)
 	return
