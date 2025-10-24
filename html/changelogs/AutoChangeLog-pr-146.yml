@@ -1,0 +1,6 @@
+author: "dwinters99"
+delete-after: True
+changes:
+  - balance: "Replaced jump windup with post-jump slowdown"
+  - code_imp: "Added skillchecks to carbon throw_impact code"
+  - config: "Jump windup and jump slowdown config options"
